@@ -1,6 +1,6 @@
 package com.excellent.apitest.network;
 
-import com.excellent.apitest.bean.response.PopularTv;
+import com.excellent.apitest.network.response.PopularTv;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -21,7 +21,8 @@ public class RequestApi {
                 // 指定上游发送事件线程
                 .subscribeOn(Schedulers.computation())
                 // 指定下游接收事件线程
-                .observeOn(AndroidSchedulers.mainThread());
+//                .observeOn(AndroidSchedulers.mainThread());
+                .observeOn(Schedulers.io());
     }
 
 

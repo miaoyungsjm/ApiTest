@@ -1,4 +1,4 @@
-package com.excellent.apitest.bean.response;
+package com.excellent.apitest.network.response;
 
 import java.util.List;
 

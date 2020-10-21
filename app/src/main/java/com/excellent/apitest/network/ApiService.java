@@ -1,11 +1,13 @@
 package com.excellent.apitest.network;
 
-import com.excellent.apitest.bean.response.MovieCredits;
-import com.excellent.apitest.bean.response.SearchMovie;
-import com.excellent.apitest.bean.response.PopularMovie;
-import com.excellent.apitest.bean.response.PopularTv;
-import com.excellent.apitest.bean.response.SearchTv;
-import com.excellent.apitest.bean.response.TvCredits;
+import com.excellent.apitest.network.response.CreditsMovie;
+import com.excellent.apitest.network.response.CreditsTv;
+import com.excellent.apitest.network.response.DiscoverMovie;
+import com.excellent.apitest.network.response.DiscoverTv;
+import com.excellent.apitest.network.response.PopularMovie;
+import com.excellent.apitest.network.response.PopularTv;
+import com.excellent.apitest.network.response.SearchMovie;
+import com.excellent.apitest.network.response.SearchTv;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -24,18 +26,18 @@ public interface ApiService {
             @Query("api_key") String key,
             @Query("page") int page);
 
-    @GET("tv/{id}/credits")
-    Observable<TvCredits> queryTvCredits(
-            @Path("id") int id,
-            @Query("api_key") String key);
-
     @GET("movie/popular")
     Observable<PopularMovie> queryPopularMovie(
             @Query("api_key") String key,
             @Query("page") int page);
 
     @GET("movie/{id}/credits")
-    Observable<MovieCredits> queryMovieCredits(
+    Observable<CreditsMovie> queryMovieCredits(
+            @Path("id") int id,
+            @Query("api_key") String key);
+
+    @GET("tv/{id}/credits")
+    Observable<CreditsTv> queryTvCredits(
             @Path("id") int id,
             @Query("api_key") String key);
 
@@ -49,5 +51,17 @@ public interface ApiService {
     Observable<SearchTv> searchTv(
             @Query("api_key") String key,
             @Query("query") String query,
+            @Query("page") int page);
+
+    @GET("discover/movie")
+    Observable<DiscoverMovie> discoverMovie(
+            @Query("api_key") String key,
+            @Query("sort_by") String query,
+            @Query("page") int page);
+
+    @GET("discover/tv")
+    Observable<DiscoverTv> discoverTv(
+            @Query("api_key") String key,
+            @Query("sort_by") String query,
             @Query("page") int page);
 }

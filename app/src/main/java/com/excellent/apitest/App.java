@@ -2,6 +2,7 @@ package com.excellent.apitest;
 
 import android.app.Application;
 
+import com.excellent.apitest.db.RoomManager;
 import com.excellent.apitest.network.RetrofitManager;
 
 /**
@@ -15,5 +16,7 @@ public class App extends Application {
         super.onCreate();
 
         RetrofitManager.getInstance().init();
+        RoomManager.getInstance().init(this);
     }
+
 }

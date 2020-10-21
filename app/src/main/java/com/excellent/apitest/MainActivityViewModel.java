@@ -2,12 +2,13 @@ package com.excellent.apitest;
 
 import android.util.Log;
 
+import com.excellent.apitest.db.RoomManager;
+import com.excellent.apitest.db.database.TMDatabase;
+import com.excellent.apitest.db.entity.Tv;
 import com.excellent.apitest.network.ApiObserver;
 import com.excellent.apitest.network.RequestApi;
-import com.excellent.apitest.bean.Tv;
-import com.excellent.apitest.bean.response.PopularTv;
+import com.excellent.apitest.network.response.PopularTv;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.lifecycle.MutableLiveData;
@@ -47,28 +48,28 @@ public class MainActivityViewModel extends ViewModel {
         ApiObserver<PopularTv> observer = new ApiObserver<PopularTv>() {
             @Override
             public void onSuccess(PopularTv popularTv) {
-                Log.e(TAG, "onSuccess: " + popularTv.getPage());
-                // todo 存数据库
-                // 数据拼接和转换
-                List<Tv> list = new ArrayList<>();
-                for (int j = 0; j < popularTv.getResults().size(); j++) {
-                    PopularTv.Results tmp = popularTv.getResults().get(j);
-                    Tv item = new Tv();
-                    list.add(item);
+                Log.e(TAG, "onSuccess: page: " + popularTv.getPage());
+                // 存数据库
+                TMDatabase db = RoomManager.getInstance().getTMDatabase();
+                db.getTvDao().insertTvs(popularTv.getResults());
+                // 检查内容
+                List<Tv> list = db.getTvDao().getAllTv();
+                for (int i = 0; i < list.size(); i++) {
+                    Log.d(TAG, "onSuccess: id: " + list.get(i).getId());
                 }
-                // todo 刷新UI
-                popTvList.setValue(list);
+                // 切换主线程刷新UI
+                popTvList.postValue(popularTv.getResults());
             }
 
             @Override
             public void onError(int errorCode, String message) {
                 Log.e(TAG, "onError: ");
                 // todo UI弹窗提示
-                showDialog.setValue(message);
+                showDialog.postValue(message);
             }
         };
         mCompositeDisposable.add(observer);
-        Observable<PopularTv> observable = new RequestApi().queryPopularTv(1);
+        Observable<PopularTv> observable = new RequestApi().queryPopularTv(2);
         observable.subscribe(observer);
     }
 
