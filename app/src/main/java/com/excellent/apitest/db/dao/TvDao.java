@@ -5,29 +5,14 @@ import com.excellent.apitest.db.entity.Tv;
 import java.util.List;
 
 import androidx.room.Dao;
-import androidx.room.Delete;
-import androidx.room.Insert;
-import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
 
 /**
  * @author ggz
  * @date 2020/10/21
  */
 @Dao
-public interface TvDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertTv(Tv... tv);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertTvs(List<Tv> list);
-
-    @Delete
-    void deleteTv(Tv... tv);
-
-    @Update
-    void updateTv(Tv... tv);
+public interface TvDao extends BaseDao<Tv> {
 
     @Query("SELECT * FROM Tv")
     List<Tv> getAllTv();
@@ -38,4 +23,8 @@ public interface TvDao {
 //    @Query("SELECT * FROM Tv " +
 //            "INNER JOIN Favorite ON Favorite.type = 1 AND Favorite.id = Tv.id ")
 //    List<Tv> getFavoriteTv();
+
+    @Query("SELECT * FROM Tv, Favorite " +
+            "WHERE Favorite.type = 1 AND Favorite.id = Tv.id ")
+    List<Tv> getFavoriteTv();
 }

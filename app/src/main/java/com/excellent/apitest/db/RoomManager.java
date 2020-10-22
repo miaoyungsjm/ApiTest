@@ -3,7 +3,7 @@ package com.excellent.apitest.db;
 import android.content.Context;
 
 import com.excellent.apitest.db.database.TMDatabase;
-import com.excellent.apitest.network.RetrofitManager;
+import com.excellent.apitest.network.ApiManager;
 
 import androidx.room.Room;
 
@@ -20,7 +20,7 @@ public class RoomManager {
 
     public static RoomManager getInstance() {
         if (null == sInstance) {
-            synchronized (RetrofitManager.class) {
+            synchronized (ApiManager.class) {
                 if (null == sInstance) {
                     sInstance = new RoomManager();
                 }

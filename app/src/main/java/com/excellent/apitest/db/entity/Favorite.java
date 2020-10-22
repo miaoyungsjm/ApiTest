@@ -2,12 +2,14 @@ package com.excellent.apitest.db.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 /**
  * @author ggz
  * @date 2020/10/21
  */
+//@Entity(foreignKeys = @ForeignKey(entity = Tv.class, parentColumns = "id", childColumns = "id"))
 @Entity
 public class Favorite {
     @PrimaryKey(autoGenerate = true)

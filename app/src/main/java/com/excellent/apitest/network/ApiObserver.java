@@ -2,7 +2,6 @@ package com.excellent.apitest.network;
 
 import android.accounts.NetworkErrorException;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.net.SocketTimeoutException;
 

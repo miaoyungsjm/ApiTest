@@ -6,7 +6,7 @@ import com.excellent.apitest.db.RoomManager;
 import com.excellent.apitest.db.database.TMDatabase;
 import com.excellent.apitest.db.entity.Tv;
 import com.excellent.apitest.network.ApiObserver;
-import com.excellent.apitest.network.RequestApi;
+import com.excellent.apitest.network.ApiRequest;
 import com.excellent.apitest.network.response.PopularTv;
 
 import java.util.List;
@@ -51,7 +51,7 @@ public class MainActivityViewModel extends ViewModel {
                 Log.e(TAG, "onSuccess: page: " + popularTv.getPage());
                 // 存数据库
                 TMDatabase db = RoomManager.getInstance().getTMDatabase();
-                db.getTvDao().insertTvs(popularTv.getResults());
+                db.getTvDao().insertList(popularTv.getResults());
                 // 检查内容
                 List<Tv> list = db.getTvDao().getAllTv();
                 for (int i = 0; i < list.size(); i++) {
@@ -69,7 +69,7 @@ public class MainActivityViewModel extends ViewModel {
             }
         };
         mCompositeDisposable.add(observer);
-        Observable<PopularTv> observable = new RequestApi().queryPopularTv(2);
+        Observable<PopularTv> observable = new ApiRequest().queryPopularTv(2);
         observable.subscribe(observer);
     }
 

@@ -1,7 +1,11 @@
 package com.excellent.apitest.network;
 
+import com.excellent.apitest.network.response.PopularTv;
+
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -13,19 +17,19 @@ import static com.excellent.apitest.network.ApiService.BASE_URL;
  * @author ggz
  * @date 2020/10/19
  */
-public class RetrofitManager {
+public class ApiManager {
 
-    private static RetrofitManager sInstance;
-    private Retrofit mRetrofit;
+    private static ApiManager sInstance;
+    private ApiService mApiService;
 
-    private RetrofitManager() {
+    private ApiManager() {
     }
 
-    public static RetrofitManager getInstance() {
+    public static ApiManager getInstance() {
         if (null == sInstance) {
-            synchronized (RetrofitManager.class) {
+            synchronized (ApiManager.class) {
                 if (null == sInstance) {
-                    sInstance = new RetrofitManager();
+                    sInstance = new ApiManager();
                 }
             }
         }
@@ -33,7 +37,7 @@ public class RetrofitManager {
     }
 
     public void init() {
-        if (mRetrofit == null) {
+        if (mApiService == null) {
             //初始化一个OkHttpClient
             OkHttpClient.Builder builder = new OkHttpClient.Builder()
                     .connectTimeout(10000, TimeUnit.MILLISECONDS)
@@ -41,8 +45,8 @@ public class RetrofitManager {
                     .writeTimeout(10000, TimeUnit.MILLISECONDS);
             OkHttpClient okHttpClient = builder.build();
 
-            //使用该OkHttpClient创建一个Retrofit对象
-            mRetrofit = new Retrofit.Builder()
+            //使用该OkHttpClient创建一个Retrofit的ApiService
+            mApiService = new Retrofit.Builder()
                     //添加Gson数据格式转换器支持
                     .addConverterFactory(GsonConverterFactory.create())
                     //添加RxJava语言支持
@@ -50,14 +54,15 @@ public class RetrofitManager {
                     //指定网络请求client
                     .client(okHttpClient)
                     .baseUrl(BASE_URL)
-                    .build();
+                    .build()
+                    .create(ApiService.class);
         }
     }
 
-    public Retrofit getRetrofit() {
-        if (mRetrofit == null) {
+    public ApiService getApiService() {
+        if (mApiService == null) {
             throw new IllegalStateException("Retrofit instance hasn't init!");
         }
-        return mRetrofit;
+        return mApiService;
     }
 }
